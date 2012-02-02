@@ -41,7 +41,7 @@ import inet.world.radio.ChannelControl;
 //The default configuration in omnetpp.ini uses no propagation delay.
 //
 
-network Net80211
+network cognitiveNetwork
 {
     parameters:
         int numHosts;
