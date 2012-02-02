@@ -18,7 +18,7 @@ package inet.examples.cognitive;
 import inet.mobility.IMobility;
 import inet.linklayer.IWirelessNic;
 import inet.base.NotificationBoard;
-import inet.linklayer.mf80211.macLayer.Mac80211;
+import inet.linklayer.ieee80211.mac.Ieee80211Mac;
 import inet.cognitive.CognitiveModule;
 
 // Standard host module for a wireless MiXiM host with configurable NIC, and OSI 
@@ -43,7 +43,7 @@ module cognitiveHost
                 @display("p=53,121");
         }
 
-        mac: Mac80211 {
+        mac: I {
 
             @display("p=171,44");
         }

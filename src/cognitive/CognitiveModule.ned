@@ -29,10 +29,10 @@ simple CognitiveModule {
         output upperLayerOut;
         
         // Control
-        input upperControlIn;
-        output upperControlOut;
-        input lowerControlIn1;
-        input lowerControlIn2;
-        output lowerControlOut1;
-        output lowerControlOut2;
+        //input upperControlIn;
+        //output upperControlOut;
+        //input lowerControlIn1;
+        //input lowerControlIn2;
+        //output lowerControlOut1;
+        //output lowerControlOut2;
 }

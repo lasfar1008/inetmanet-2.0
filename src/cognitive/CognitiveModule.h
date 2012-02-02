@@ -19,7 +19,7 @@
 #include <omnetpp.h>
 #include <cmessage.h>
 
-class CognitiveModule {
+class CognitiveModule : public cSimpleModule {
 	public:
 		CognitiveModule();
 		virtual ~CognitiveModule();

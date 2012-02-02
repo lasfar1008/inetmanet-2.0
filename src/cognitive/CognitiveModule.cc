@@ -27,7 +27,7 @@ CognitiveModule::~CognitiveModule() {
 
 void CognitiveModule::initialize(int stage) {
 	if (stage == 0) {
-		debugEV << "Initializing stage 0";
+		EV << "Initializing stage 0";
 
         lowerLayerIn1  = findGate("lowerLayerIn1");
         lowerLayerIn2  = findGate("lowerLayerIn2");
