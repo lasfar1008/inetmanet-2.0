@@ -43,7 +43,7 @@ module cognitiveHost
                 @display("p=53,121");
         }
 
-        mac: I {
+        mac: Ieee80211Mac {
 
             @display("p=171,44");
         }
