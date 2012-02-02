@@ -1,0 +1,60 @@
+//***************************************************************************
+// * file:        Network.ned
+// *
+// * author:      Marc Loebbers
+// *
+// * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
+// *              Technische Universitaet Berlin, Germany.
+// *
+// *              This program is free software; you can redistribute it 
+// *              and/or modify it under the terms of the GNU General Public 
+// *              License as published by the Free Software Foundation; either
+// *              version 2 of the License, or (at your option) any later 
+// *              version.
+// *              For further information see file COPYING 
+// *              in the top level directory
+// ***************************************************************************
+// * part of:     framework implementation developed by tkn
+// * description: a network to test the 802.11 modules
+// *              
+// ***************************************************************************
+// * changelog:   $Revision: 103 $
+// *              last modified:   $Date: 2004-09-23 09:56:00 +0200 (Do, 23 Sep 2004) $
+// *              by:              $Author: omfw-willkomm $
+// **************************************************************************/
+package inet.examples.cognitive;
+
+import inet.networklayer.autorouting.ipv4.FlatNetworkConfigurator;
+import inet.world.radio.ChannelControl;
+
+//This example shows how to use MiXiMs 802.11 protocol implementation. 
+//
+//The network consists of ten hosts broadcasting bursts of three packets
+//to the other hosts. When a broadcast is received a reply is sent back 
+//to the sender.
+//
+//The hosts use "Mac80211" as MAC layer and their phy layer uses 
+//"SimplePathlossModel" as AnalogueModel and "Decider80211" as Decider.
+//Note that Mac80211 and Decider80211 are always meant to be used
+//together.
+//
+//The default configuration in omnetpp.ini uses no propagation delay.
+//
+
+network Net80211
+{
+    parameters:
+        int numHosts;
+    submodules:
+        host[numHosts]: cognitiveHost {
+            parameters:
+                @display("r=,,#707070;p=250,58");
+        }
+        channelControl: ChannelControl {
+            parameters:
+                @display("p=60,50");
+        }
+        configurator: FlatNetworkConfigurator {
+            @display("p=140,50");
+        }
+}
