@@ -20,6 +20,7 @@ import inet.linklayer.IWirelessNic;
 import inet.base.NotificationBoard;
 import inet.linklayer.ieee80211.mac.Ieee80211Mac;
 import inet.cognitive.CognitiveModule;
+import inet.applications.udpapp.UDPBasicBurst;
 
 // Standard host module for a wireless MiXiM host with configurable NIC, and OSI 
 // layers, and mobility module.
@@ -41,6 +42,10 @@ module cognitiveHost
         mobility: <mobilityType> like IMobility if mobilityType != "" && numRadios > 0 {
             parameters:
                 @display("p=53,121");
+        }
+        
+        appl : UDPBasicBurst {
+            
         }
 
         mac: Ieee80211Mac {
