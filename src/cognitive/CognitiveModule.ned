@@ -20,9 +20,7 @@ simple CognitiveModule {
     gates:
         // Lower Layer
         input lowerLayerIn1;
-        input lowerLayerIn2;
         output lowerLayerOut1;
-        output lowerLayerOut2;
 
         // Upper Layer
         input upperLayerIn;

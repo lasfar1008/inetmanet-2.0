@@ -16,23 +16,34 @@
 package inet.examples.cognitive;
 
 import inet.mobility.IMobility;
-import inet.linklayer.IWirelessNic;
 import inet.base.NotificationBoard;
 import inet.linklayer.ieee80211.mac.Ieee80211Mac;
+import inet.linklayer.ieee80211.radio.Ieee80211Radio;
 import inet.cognitive.CognitiveModule;
-import inet.applications.udpapp.UDPBasicBurst;
 
 // Standard host module for a wireless MiXiM host with configurable NIC, and OSI 
 // layers, and mobility module.
 
-module cognitiveHost
-{
+module cognitiveHost {
     @display("bgb=249,329");
+    @node();
+    string mobilityType;
+    int numRadios = default(1);
+    bool IPForward = default(true);
+    string routingFile = default("");
+    
+    int numTcpApps = default(0);  // no of TCP apps. Specify the app types in INI file with tcpApp[0..1].typename="TCPEchoApp" syntax
+    int numUdpApps = default(0);  // no of UDP apps. Specify the app types in INI file with udpApp[0..1].typename="UDPVideoStreamCli" syntax
+    int numSctpApps = default(0); // no of SCTP apps. Specify the app types in INI file with sctpApp[0..1].typename="SCTPServer" syntax
+    string tcpType = default(firstAvailable("TCP", "TCP_lwIP", "TCP_NSC", "TCP_None"));  // tcp implementation (e.g. ~TCP, ~TCP_lwIP, ~TCP_NSC) or ~TCPSpoof
+    string udpType = default(firstAvailable("UDP","UDP_None"));
+    string sctpType = default(firstAvailable("SCTP","SCTP_None"));
+    
     gates:
         // Just One ATM
         //input radioIn[numRadios] @directIn;
         input radioIn @directIn;
-    submodules:
+    submodules:        
         notificationBoard: NotificationBoard {
             parameters:
                 @display("p=53,194");
@@ -44,45 +55,32 @@ module cognitiveHost
                 @display("p=53,121");
         }
         
-        appl : UDPBasicBurst {
-            
-        }
-
+        //appl : UDPBasicBurst { }
+        
         mac: Ieee80211Mac {
-
             @display("p=171,44");
         }
 
         cognitive: CognitiveModule {
-
             @display("p=171,152");
         }
 
 		// Just One ATM
         //wlan[numRadios]: <default("Ieee80211Nic")> like IWirelessNic {
-        nic1: <default("Ieee80211Nic")> like IWirelessNic {
+        radio: Ieee80211Radio {
             parameters:
                 @display("p=171,256;q=queue");
         }
 
-    connections:
-        //appl.lowerLayerOut --> mac.upperLayerIn;
-        //appl.lowerLayerIn <-- mac.upperLayerOut;
-        //appl.lowerControlOut --> mac.upperControlIn;
-        //appl.lowerControlIn <-- mac.upperControlOut;
+    connections allowunconnected:
+        //appl.udpOut --> mac.upperLayerIn;
+        //appl.udpIn <-- mac.upperLayerOut;
+
         mac.lowerLayerOut --> cognitive.upperLayerIn;
         mac.lowerLayerIn <-- cognitive.upperLayerOut;
 
-        cognitive.lowerLayerOut1 --> nic1.upperLayerIn;
-        //cognitive.lowerLayerOut2 --> nic2.upperLayerIn;
-        cognitive.lowerLayerIn1 <-- nic1.upperLayerOut;
-        //cognitive.lowerLayerIn2 <-- nic2.upperLayerOut;
-        //cognitive.lowerControlOut1 --> nic1.upperControlIn;
-        //cognitive.lowerControlOut2 --> nic2.upperControlIn;
-        //cognitive.lowerControlIn1 <-- nic1.upperControlOut;
-        //cognitive.lowerControlIn2 <-- nic2.upperControlOut;
+        cognitive.lowerLayerOut1 --> radio.upperLayerIn;
+        cognitive.lowerLayerIn1 <-- radio.upperLayerOut;
 
-        radioIn --> nic1.radioIn;
-        //radioInNotUsed --> nic2.radioIn;
-
+        radioIn --> radio.radioIn;
 }
