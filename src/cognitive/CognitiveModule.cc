@@ -27,9 +27,9 @@ CognitiveModule::CognitiveModule() {
 
 CognitiveModule::~CognitiveModule() {
 	// TODO Auto-generated destructor stub
-	free(senseChannelStart);
-	free(senseChannelStop);
-	free(simpleUnusefulMessage);
+	cancelAndDelete(senseChannelStart);
+	cancelAndDelete(senseChannelStop);
+	cancelAndDelete(simpleUnusefulMessage);
 }
 
 void CognitiveModule::initialize(int stage) {
@@ -110,8 +110,8 @@ void CognitiveModule::handleSelfMsg(cMessage* msg) {
 }
 
 void CognitiveModule::colorNode() {
-	ChannelControl *cc = dynamic_cast<ChannelControl *>(simulation.getModuleByPath("channelControl"));
 	SnrEvalCognitive *snr = dynamic_cast<SnrEvalCognitive *>(getParentModule()->getSubmodule("radio",0));
+
 	int channel = snr->getChannelNumber();
 	char *color = "";
 	switch (channel){
