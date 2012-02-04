@@ -40,7 +40,6 @@ void Ieee80211NewRadioModel::initializeFrom(cModule *radioModule)
 {
     snirThreshold = dB2fraction(radioModule->par("snirThreshold").doubleValue());
 
-
     if (strcmp("SHORT", radioModule->par("WifiPreambleMode").stringValue())==0)
         wifiPreamble = WIFI_PREAMBLE_SHORT;
     else if (strcmp("LONG", radioModule->par("WifiPreambleMode").stringValue())==0)

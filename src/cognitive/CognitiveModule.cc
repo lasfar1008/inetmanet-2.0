@@ -15,6 +15,10 @@
 
 #include "CognitiveModule.h"
 
+#include "ChannelControl.h"
+
+#include "SnrEvalCognitive.h"
+
 Define_Module(CognitiveModule);
 
 CognitiveModule::CognitiveModule() {
@@ -23,6 +27,9 @@ CognitiveModule::CognitiveModule() {
 
 CognitiveModule::~CognitiveModule() {
 	// TODO Auto-generated destructor stub
+	free(senseChannelStart);
+	free(senseChannelStop);
+	free(simpleUnusefulMessage);
 }
 
 void CognitiveModule::initialize(int stage) {
@@ -37,13 +44,11 @@ void CognitiveModule::initialize(int stage) {
         upperLayerIn  = findGate("upperLayerIn");
         upperLayerOut  = findGate("upperLayerOut");
 
-        lowerControlIn1 = findGate("lowerControlIn1");
-        lowerControlIn2 = findGate("lowerControlIn2");
-        lowerControlOut1 = findGate("lowerControlOut1");
-        lowerControlOut2 = findGate("lowerControlOut2");
+        simpleUnusefulMessage = new cMessage();
+        senseChannelStart = new cMessage("senseChannelStart");
+        senseChannelStop = new cMessage("senseChannelStop");
 
-        upperControlIn = findGate("upperControlIn");
-        upperControlOut = findGate("upperControlOut");
+        scheduleAt(simTime() + 100, senseChannelStart);
 
 	} else if (stage == 1) {
 
@@ -68,12 +73,6 @@ if (msg->isSelfMessage()){
     } else if(msg->getArrivalGateId()==upperLayerIn) {
         //recordPacket(PassedMessage::INCOMING,PassedMessage::UPPER_DATA,msg);
         handleUpperMsg(msg);
-    } else if(msg->getArrivalGateId()==upperControlIn) {
-        //recordPacket(PassedMessage::INCOMING,PassedMessage::UPPER_CONTROL,msg);
-        handleUpperControl(msg);
-    } else if(msg->getArrivalGateId()==lowerControlIn1 || msg->getArrivalGateId()==lowerControlIn2){
-        //recordPacket(PassedMessage::INCOMING,PassedMessage::LOWER_CONTROL,msg);
-        handleLowerControl(msg);
     } else if(msg->getArrivalGateId()==lowerLayerIn1 || msg->getArrivalGateId()==lowerLayerIn2) {
         //recordPacket(PassedMessage::INCOMING,PassedMessage::LOWER_DATA,msg);
         handleLowerMsg(msg);
@@ -97,14 +96,38 @@ if (msg->isSelfMessage()){
 }
 
 void CognitiveModule::handleSelfMsg(cMessage* msg) {
-	//error(msg->getName());
+	if (msg->isName("senseChannelStart")) {
+		// Need to start sensing the channel
+		scheduleAt(simTime() + 200, senseChannelStop);
+		this->getParentModule()->bubble("Start to sense");
+		getParentModule()->getDisplayString().setTagArg("b",3,"black");
+	} else if (msg->isName("senseChannelStop")) {
+		// Need to stop sensing the channel
+		scheduleAt(simTime() + 2000, senseChannelStart);
+		this->getParentModule()->bubble("Stopped to sense");
+		colorNode();
+	}
 }
 
-void CognitiveModule::handleLowerControl(cMessage* msg) {
-	//error(msg->getName());
-	send(msg,upperControlOut);
-}
+void CognitiveModule::colorNode() {
+	ChannelControl *cc = dynamic_cast<ChannelControl *>(simulation.getModuleByPath("channelControl"));
+	SnrEvalCognitive *snr = dynamic_cast<SnrEvalCognitive *>(getParentModule()->getSubmodule("radio",0));
+	int channel = snr->getChannelNumber();
+	char *color = "";
+	switch (channel){
+					case 0: color = "blue"; break;
+					case 1: color = "green"; break;
+					case 2: color = "red"; break;
+					case 3: color = "purple"; break;
+					case 4: color = "gold"; break;
+					case 5: color = "orange"; break;
+					case 6: color = "yellow"; break;
+					case 7: color = "cyan"; break;
+					case 8: color = "darkblue"; break;
+					case 9: color = "darkgreen"; break;
+					case 10: color = "darkred"; break;
+					case 11: color = "darkpurple"; break;
+	}
 
-void CognitiveModule::handleUpperControl(cMessage* msg) {
-	send(msg,lowerControlOut1);
+	getParentModule()->getDisplayString().setTagArg("b",3,color);
 }

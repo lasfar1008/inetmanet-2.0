@@ -13,16 +13,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package inet.cognitive;
+#include "SnrEvalCognitive.h"
 
-simple CognitiveModule {
-    @display("i=block/tunnel");
-    gates:
-        // Lower Layer
-        input lowerLayerIn1;
-        output lowerLayerOut1;
+Define_Module(SnrEvalCognitive);
 
-        // Upper Layer
-        input upperLayerIn;
-        output upperLayerOut;
+int SnrEvalCognitive::getChannelNumber() {
+	return rs.getChannelNumber();
 }

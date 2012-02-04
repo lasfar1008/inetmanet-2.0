@@ -13,16 +13,14 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package inet.cognitive;
+#ifndef SNREVALCOGNITIVE_H_
+#define SNREVALCOGNITIVE_H_
 
-simple CognitiveModule {
-    @display("i=block/tunnel");
-    gates:
-        // Lower Layer
-        input lowerLayerIn1;
-        output lowerLayerOut1;
+#include "SnrEval80211.h"
 
-        // Upper Layer
-        input upperLayerIn;
-        output upperLayerOut;
-}
+class SnrEvalCognitive : public SnrEval80211 {
+public:
+	int getChannelNumber();
+};
+
+#endif /* SNREVALCOGNITIVE_H_ */

@@ -54,6 +54,7 @@ class INET_API Ieee80211NewRadioModel : public IRadioModel
     bool useTestFrame;
 
   public:
+
     virtual void initializeFrom(cModule *radioModule);
 
     virtual double calculateDuration(AirFrame *airframe);

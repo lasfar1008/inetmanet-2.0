@@ -19,6 +19,9 @@
 #include <omnetpp.h>
 #include <cmessage.h>
 
+#include "linklayer/ieee80211/radio/Ieee80211RadioModel.h"
+#include "linklayer/radio/Radio.h"
+
 class CognitiveModule : public cSimpleModule {
 	public:
 		CognitiveModule();
@@ -31,21 +34,18 @@ class CognitiveModule : public cSimpleModule {
         int upperLayerIn;
         int upperLayerOut;
 
-        int lowerControlIn1;
-        int lowerControlIn2;
-        int lowerControlOut1;
-        int lowerControlOut2;
-        int upperControlIn;
-        int upperControlOut;
-
-
 		void initialize(int stage);
 		void handleMessage(cMessage *msg);
 		void handleUpperMsg(cMessage *msg);
 		void handleLowerMsg(cMessage *msg);
 		void handleSelfMsg(cMessage*);
-		void handleLowerControl(cMessage* msg);
-		void handleUpperControl(cMessage*);
+
+	private:
+		cMessage* simpleUnusefulMessage;
+		cMessage* senseChannelStart;
+		cMessage* senseChannelStop;
+
+		void colorNode();
 };
 
 #endif /* COGNITIVEMODULE_H_ */
